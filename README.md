@@ -1,30 +1,94 @@
-# ICT HelpDesk and Incident Management System
-  
-This is a project built with [Chef](https://chef.convex.dev) using [Convex](https://convex.dev) as its backend.
- You can find docs about Chef with useful information like how to deploy to production [here](https://docs.convex.dev/chef).
-  
-This project is connected to the Convex deployment named [`artful-mallard-201`](https://dashboard.convex.dev/d/artful-mallard-201).
-  
-## Project structure
-  
-The frontend code is in the `app` directory and is built with [Vite](https://vitejs.dev/).
-  
-The backend code is in the `convex` directory.
-  
-`npm run dev` will start the frontend and backend servers.
+ICT HelpDesk & Incident Management System
 
-## App authentication
+A scalable ICT HelpDesk and Incident Management System designed to streamline issue reporting, prioritization, tracking, and resolution within an organization. The system focuses on reliability, performance, and maintainability, with a modern Node.js-based backend.
 
-Chef apps use [Convex Auth](https://auth.convex.dev/) with Anonymous auth for easy sign in. You may wish to change this before deploying your app.
+Project Overview
 
-## Developing and deploying your app
+This application enables users to:
 
-Check out the [Convex docs](https://docs.convex.dev/) for more information on how to develop with Convex.
-* If you're new to Convex, the [Overview](https://docs.convex.dev/understanding/) is a good place to start
-* Check out the [Hosting and Deployment](https://docs.convex.dev/production/) docs for how to deploy your app
-* Read the [Best Practices](https://docs.convex.dev/understanding/best-practices/) guide for tips on how to improve you app further
+Create and track support tickets
 
-## HTTP API
+Manage incidents and priorities
 
-User-defined http routes are defined in the `convex/router.ts` file. We split these routes into a separate file from `convex/http.ts` to allow us to prevent the LLM from modifying the authentication routes.
+Assign and resolve issues efficiently
+
+Improve visibility into support workflows
+
+The project was built with scalability and future extension in mind, following clean architecture and asynchronous, non-blocking backend patterns.
+
+My Role
+
+Role: Tech Lead / Backend Engineer
+
+Led the project end-to-end from requirements to deployment
+
+Designed the backend architecture and API contracts
+
+Implemented core business logic and HTTP APIs
+
+Reviewed code and guided development standards
+
+Optimized queries and request handling for performance and reliability
+
+Tech Stack
+
+Backend: Node.js (Convex)
+
+Language: TypeScript
+
+Frontend: React + Vite
+
+Authentication: Convex Auth
+
+API: HTTP/REST endpoints
+
+Tooling: Chef, npm
+
+Architecture & Design
+
+Modular backend structure for maintainability
+
+Asynchronous, non-blocking request handling
+
+Clear separation between authentication and business logic
+
+Optimized data access with pagination and indexing
+
+Role-based access control at the API level
+
+Project Structure
+
+app/ – Frontend (React + Vite)
+
+convex/ – Backend logic, data models, and HTTP APIs
+
+convex/router.ts – User-defined HTTP routes
+
+convex/http.ts – Authentication and core routing
+
+Running the Project Locally
+npm install
+npm run dev
+
+
+This starts both the frontend and backend development servers.
+
+Authentication
+
+The app currently uses Convex Auth (Anonymous authentication) for development convenience. This can be replaced with stricter authentication methods before production deployment.
+
+Deployment
+
+The project is connected to a Convex deployment and can be deployed to production following Convex best practices.
+See the official Convex documentation for deployment and scaling guidance.
+
+Future Improvements
+
+Advanced role-based permissions
+
+Real-time notifications and updates
+
+Enhanced reporting and analytics
+
+Integration with external monitoring tools
 
