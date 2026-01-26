@@ -30,36 +30,36 @@ export function UserManagement() {
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case "admin": return "text-red-600 bg-red-100";
-      case "technician": return "text-blue-600 bg-blue-100";
-      case "end-user": return "text-green-600 bg-green-100";
-      default: return "text-gray-600 bg-gray-100";
+      case "admin": return "text-red-800 bg-red-50 border-red-200";
+      case "technician": return "text-primary bg-primary-50 border-primary-200";
+      case "end-user": return "text-emerald-800 bg-emerald-50 border-emerald-200";
+      default: return "text-secondary-600 bg-secondary-100 border-secondary-200";
     }
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">User Management</h2>
+    <div className="card">
+      <h2 className="text-2xl font-semibold text-secondary-900 mb-6">User Management</h2>
 
       {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Search Users</label>
+          <label className="block text-sm font-semibold text-secondary-700 mb-2">Search Users</label>
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by name or email..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-input"
           />
         </div>
         
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+          <label className="block text-sm font-semibold text-secondary-700 mb-2">Role</label>
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-select"
           >
             <option value="all">All Roles</option>
             <option value="admin">Admin</option>
@@ -71,48 +71,48 @@ export function UserManagement() {
 
       {/* Users Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-border">
+          <thead className="bg-secondary-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-secondary-700 uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-secondary-700 uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-secondary-700 uppercase tracking-wider">
                 Role
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-secondary-700 uppercase tracking-wider">
                 Department
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-semibold text-secondary-700 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-background-secondary divide-y divide-border">
             {filteredUsers.map((user) => (
-              <tr key={user._id} className="hover:bg-gray-50">
+              <tr key={user._id} className="hover:bg-secondary-50 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{user.name || "N/A"}</div>
+                  <div className="text-sm font-semibold text-secondary-900">{user.name || "N/A"}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{user.email || "N/A"}</div>
+                  <div className="text-sm text-secondary-900">{user.email || "N/A"}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role || "")}`}>
+                  <span className={`badge-status ${getRoleColor(user.role || "")}`}>
                     {user.role?.replace("-", " ") || "N/A"}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary-900 font-medium">
                   {user.department || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold">
                   <select
                     value={user.role || "end-user"}
                     onChange={(e) => handleRoleChange(user._id, e.target.value as "admin" | "technician" | "end-user")}
-                    className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="form-select text-sm"
                   >
                     <option value="end-user">End User</option>
                     <option value="technician">Technician</option>
@@ -127,25 +127,25 @@ export function UserManagement() {
 
       {filteredUsers.length === 0 && (
         <div className="text-center py-8">
-          <p className="text-gray-500">No users found.</p>
+          <p className="text-secondary-600">No users found.</p>
         </div>
       )}
 
       {/* Summary Stats */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-gray-900">Total Users</h3>
-          <p className="text-3xl font-bold text-blue-600">{allUsers?.length || 0}</p>
+        <div className="card bg-secondary-50">
+          <h3 className="text-lg font-semibold text-secondary-900">Total Users</h3>
+          <p className="text-3xl font-bold text-primary">{allUsers?.length || 0}</p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-gray-900">Technicians</h3>
-          <p className="text-3xl font-bold text-blue-600">
+        <div className="card bg-secondary-50">
+          <h3 className="text-lg font-semibold text-secondary-900">Technicians</h3>
+          <p className="text-3xl font-bold text-primary">
             {allUsers?.filter(u => u.role === "technician").length || 0}
           </p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-gray-900">Admins</h3>
-          <p className="text-3xl font-bold text-red-600">
+        <div className="card bg-secondary-50">
+          <h3 className="text-lg font-semibold text-secondary-900">Admins</h3>
+          <p className="text-3xl font-bold text-red-800">
             {allUsers?.filter(u => u.role === "admin").length || 0}
           </p>
         </div>

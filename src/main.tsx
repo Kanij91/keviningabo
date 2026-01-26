@@ -11,11 +11,12 @@ console.log("Convex URL from env:", import.meta.env.VITE_CONVEX_URL);
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ConvexProvider client={convex}>
-      <ConvexAuthProvider client={convex}>
+    <ConvexAuthProvider client={convex}>
+      <ConvexProvider client={convex}>
         <App />
-      </ConvexAuthProvider>
-    </ConvexProvider>
+      </ConvexProvider>
+    </ConvexAuthProvider>
   </React.StrictMode>
 );
+
 

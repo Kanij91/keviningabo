@@ -8,12 +8,14 @@ import { UserSetup } from "./components/UserSetup";
 
 export default function App() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm h-16 flex justify-between items-center border-b shadow-sm px-4">
-        <h2 className="text-xl font-semibold text-blue-600">ICT HelpDesk</h2>
-        <Authenticated>
-          <SignOutButton />
-        </Authenticated>
+    <div className="min-h-screen flex flex-col bg-background">
+      <header className="sticky top-0 z-10 bg-primary border-b border-primary-700 shadow-sm">
+        <div className="h-16 flex justify-between items-center px-6">
+          <h2 className="text-white font-serif text-xl font-bold tracking-tight">ICT Help Desk System</h2>
+          <Authenticated>
+            <SignOutButton />
+          </Authenticated>
+        </div>
       </header>
       <main className="flex-1">
         <Content />
@@ -30,7 +32,7 @@ function Content() {
   if (loggedInUser === undefined || currentUser === undefined) {
     return (
       <div className="flex justify-center items-center min-h-96">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -49,8 +51,8 @@ function Content() {
         <div className="flex items-center justify-center min-h-96 p-8">
           <div className="w-full max-w-md mx-auto">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-blue-600 mb-4">ICT HelpDesk</h1>
-              <p className="text-xl text-gray-600">Sign in to access the system</p>
+              <h1 className="text-4xl font-bold text-primary mb-4 font-serif">ICT Help Desk System</h1>
+              <p className="text-lg text-secondary-600">Sign in to access the system</p>
             </div>
             <SignInForm />
           </div>

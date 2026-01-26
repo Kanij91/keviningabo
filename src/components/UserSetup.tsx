@@ -18,12 +18,18 @@ export function UserSetup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Is createProfile callable?", typeof createProfile);
     console.log("Submitting profile form...");
+    console.log("Name value:", name);
+    console.log("User email value:", loggedInUser?.email);
 
-    if (!name.trim() || !loggedInUser?.email) return;
+    if (!name.trim() || !loggedInUser?.email) {
+        console.log("Validation failed. Request skipped."); return;
+    }
 
     setIsSubmitting(true);
     try {
+      console.log("Attempting Convex mutation with:", { email: loggedInUser.email, name });
       await createProfile({
         email: loggedInUser.email,
         name,
@@ -44,39 +50,39 @@ export function UserSetup() {
   return (
     <div className="flex items-center justify-center min-h-96 p-8">
       <div className="w-full max-w-md mx-auto">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        <div className="card">
+          <h2 className="text-2xl font-semibold text-secondary-900 mb-6 text-center">
             Complete Your Profile
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-secondary-700 mb-2">
                 Full Name *
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="form-input"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-secondary-700 mb-2">
                 Email
               </label>
               <input
                 type="email"
                 value={loggedInUser?.email || ""}
                 disabled
-                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                className="form-input bg-secondary-50"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-secondary-700 mb-2">
                 Role *
               </label>
               <select
@@ -84,7 +90,7 @@ export function UserSetup() {
                 onChange={(e) =>
                   setRole(e.target.value as "admin" | "technician" | "end-user")
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="form-select"
               >
                 <option value="end-user">End User</option>
                 <option value="technician">Technician</option>
@@ -93,14 +99,14 @@ export function UserSetup() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-secondary-700 mb-2">
                 Department
               </label>
               <input
                 type="text"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="form-input"
                 placeholder="e.g., IT, HR, Finance"
               />
             </div>
@@ -108,7 +114,7 @@ export function UserSetup() {
             <button
               type="submit"
               disabled={isSubmitting || !name.trim()}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md"
+              className="btn-primary w-full"
             >
               {isSubmitting ? "Creating Profile..." : "Complete Setup"}
             </button>

@@ -1,4 +1,4 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query} from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 
@@ -28,21 +28,25 @@ export const createUserProfile = mutation({
 },
 
   handler: async (ctx, args) => {
-    const existing = await ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", args.email))
-      .unique();
-
-    if (existing) {
-      return existing._id; 
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("You must be logged in to create a profile.");
+    }
+    // Get the Convex Auth user by ID
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw new Error("Auth user not found.");
     }
 
-    const newUser = await ctx.db.insert("users", {
+    // Update that user with profile fields
+    await ctx.db.patch(userId, {
       email: args.email,
-      name: "New User",
-      role: "end-user",
+      name: args.name ?? user.name ?? "New User",
+      role: args.role ?? "end-user",
+      department: args.department ?? "",
     });
-    return newUser;
+
+    return userId;
   },
 });
 

@@ -3,21 +3,6 @@ import { v } from "convex/values";
 import { authTables } from "@convex-dev/auth/server";
 
 export const applicationTables = {
-  // Users table with role-based access
-  users: defineTable({
-    email: v.string(),
-    name: v.optional(v.string()),
-role: v.optional(
-  v.union(
-    v.literal("admin"),
-    v.literal("technician"),
-    v.literal("end-user")
-  )
-),
-
-    department: v.optional(v.string()),
-  }).index("by_email", ["email"]),
-
   // Tickets (Incidents) table
   tickets: defineTable({
     title: v.string(),
@@ -78,5 +63,27 @@ role: v.optional(
 
 export default defineSchema({
   ...authTables,
+  // Customized Convex Auth `users` table:
+  users: defineTable({
+    // Default Convex Auth fields (from docs)
+    name: v.optional(v.string()),
+    image: v.optional(v.string()),
+    email: v.optional(v.string()),
+    emailVerificationTime: v.optional(v.number()),
+    phone: v.optional(v.string()),
+    phoneVerificationTime: v.optional(v.number()),
+    isAnonymous: v.optional(v.boolean()),
+
+    // My custom fields
+    role: v.optional(
+      v.union(
+        v.literal("admin"),
+        v.literal("technician"),
+        v.literal("end-user")
+      )
+    ),
+    department: v.optional(v.string()),
+  }).index("email", ["email"]),
+
   ...applicationTables,
 });

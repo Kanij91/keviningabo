@@ -12,13 +12,16 @@ type View = "dashboard" | "tickets" | "create-ticket" | "knowledge-base" | "user
 export function Dashboard() {
   const [currentView, setCurrentView] = useState<View>("dashboard");
   const currentUser = useQuery(api.users.getCurrentUser);
-  const myTickets = useQuery(api.tickets.getMyTickets);
-  const ticketStats = useQuery(api.tickets.getTicketStats);
+  const myTickets = currentUser ? useQuery(api.tickets.getMyTickets) : null;
+  const ticketStats =
+  currentUser && (currentUser.role === "admin" || currentUser.role === "technician")
+    ? useQuery(api.tickets.getTicketStats)
+    : null;
 
   if (!currentUser) {
     return (
       <div className="flex justify-center items-center min-h-96">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -39,17 +42,15 @@ export function Dashboard() {
         return isAdmin ? <UserManagement /> : <div>Unauthorized</div>;
       case "stats":
         return isAdmin ? <Stats /> : <div>Unauthorized</div>;
-      default:
+        default:
         return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Welcome, {currentUser.name}!
-              </h2>
-              <p className="text-gray-600 mb-4">
-                Role: <span className="font-medium capitalize">{currentUser.role}</span>
+          <div className="space-y-section">
+            <div className="card">
+              <h2 className="mb-4">Welcome, {currentUser.name}!</h2>
+              <p className="text-secondary-600 mb-4">
+                Role: <span className="font-semibold capitalize">{currentUser.role}</span>
                 {currentUser.department && (
-                  <span> | Department: <span className="font-medium">{currentUser.department}</span></span>
+                  <span> | Department: <span className="font-semibold">{currentUser.department}</span></span>
                 )}
               </p>
             </div>
@@ -57,43 +58,41 @@ export function Dashboard() {
             {/* Quick Stats */}
             {(isTechnician || isAdmin) && ticketStats && (
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-white rounded-lg shadow-md p-4">
-                  <h3 className="text-lg font-semibold text-gray-900">New Tickets</h3>
-                  <p className="text-3xl font-bold text-red-600">{ticketStats.new}</p>
+                <div className="card">
+                  <h3 className="text-sm font-semibold text-secondary-700 mb-2">New Tickets</h3>
+                  <p className="text-3xl font-bold text-primary">{ticketStats.new}</p>
                 </div>
-                <div className="bg-white rounded-lg shadow-md p-4">
-                  <h3 className="text-lg font-semibold text-gray-900">In Progress</h3>
-                  <p className="text-3xl font-bold text-yellow-600">{ticketStats.inProgress}</p>
+                <div className="card">
+                  <h3 className="text-sm font-semibold text-secondary-700 mb-2">In Progress</h3>
+                  <p className="text-3xl font-bold text-amber-800">{ticketStats.inProgress}</p>
                 </div>
-                <div className="bg-white rounded-lg shadow-md p-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Resolved</h3>
-                  <p className="text-3xl font-bold text-green-600">{ticketStats.resolved}</p>
+                <div className="card">
+                  <h3 className="text-sm font-semibold text-secondary-700 mb-2">Resolved Tickets</h3>
+                  <p className="text-3xl font-bold text-emerald-800">{ticketStats.resolved}</p>
                 </div>
-                <div className="bg-white rounded-lg shadow-md p-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Total</h3>
-                  <p className="text-3xl font-bold text-blue-600">{ticketStats.total}</p>
+                <div className="card">
+                  <h3 className="text-sm font-semibold text-secondary-700 mb-2">Total Tickets</h3>
+                  <p className="text-3xl font-bold text-primary">{ticketStats.total}</p>
                 </div>
               </div>
             )}
 
             {/* My Tickets */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                {isEndUser ? "My Submitted Tickets" : "My Assigned Tickets"}
-              </h3>
+            <div className="card">
+              <h3 className="mb-4">{isEndUser ? "My Submitted Tickets" : "My Assigned Tickets"}</h3>
               {myTickets && myTickets.length > 0 ? (
                 <div className="space-y-3">
                   {myTickets.slice(0, 5).map((ticket) => (
-                    <div key={ticket._id} className="border-l-4 border-blue-500 pl-4 py-2">
+                    <div key={ticket._id} className="border-l-4 border-primary pl-4 py-3 bg-secondary-50 rounded-r-container">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h4 className="font-medium text-gray-900">{ticket.title}</h4>
-                          <p className="text-sm text-gray-600">
-                            Status: <span className="capitalize">{ticket.status}</span> | 
-                            Priority: <span className="capitalize">{ticket.priority}</span>
+                          <h4 className="font-semibold text-secondary-900">{ticket.title}</h4>
+                          <p className="text-sm text-secondary-600 mt-1">
+                            Status: <span className="capitalize font-medium">{ticket.status}</span> | 
+                            Priority: <span className="capitalize font-medium">{ticket.priority}</span>
                           </p>
                         </div>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-secondary-500">
                           {new Date(ticket._creationTime).toLocaleDateString()}
                         </span>
                       </div>
@@ -102,14 +101,14 @@ export function Dashboard() {
                   {myTickets.length > 5 && (
                     <button
                       onClick={() => setCurrentView("tickets")}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="text-primary hover:text-primary-hover text-sm font-semibold transition-colors"
                     >
                       View all tickets →
                     </button>
                   )}
                 </div>
               ) : (
-                <p className="text-gray-600">No tickets found.</p>
+                <p className="text-secondary-600">No tickets found.</p>
               )}
             </div>
           </div>
@@ -118,17 +117,17 @@ export function Dashboard() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-md">
-        <nav className="mt-8">
-          <div className="px-4 space-y-2">
+      <div className="w-64 bg-background-secondary border-r border-border shadow-sm">
+        <nav className="mt-6">
+          <div className="px-4 space-y-1">
             <button
               onClick={() => setCurrentView("dashboard")}
-              className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
+              className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                 currentView === "dashboard"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:bg-gray-100"
+                  ? "bg-primary-50 text-primary border-l-4 border-primary"
+                  : "text-secondary-700 hover:bg-secondary-50"
               }`}
             >
               Dashboard
@@ -136,10 +135,10 @@ export function Dashboard() {
             
             <button
               onClick={() => setCurrentView("tickets")}
-              className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
+              className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                 currentView === "tickets"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:bg-gray-100"
+                  ? "bg-primary-50 text-primary border-l-4 border-primary"
+                  : "text-secondary-700 hover:bg-secondary-50"
               }`}
             >
               {isEndUser ? "My Tickets" : "All Tickets"}
@@ -147,10 +146,10 @@ export function Dashboard() {
 
             <button
               onClick={() => setCurrentView("create-ticket")}
-              className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
+              className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                 currentView === "create-ticket"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:bg-gray-100"
+                  ? "bg-primary-50 text-primary border-l-4 border-primary"
+                  : "text-secondary-700 hover:bg-secondary-50"
               }`}
             >
               Create Ticket
@@ -158,10 +157,10 @@ export function Dashboard() {
 
             <button
               onClick={() => setCurrentView("knowledge-base")}
-              className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
+              className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                 currentView === "knowledge-base"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:bg-gray-100"
+                  ? "bg-primary-50 text-primary border-l-4 border-primary"
+                  : "text-secondary-700 hover:bg-secondary-50"
               }`}
             >
               Knowledge Base
@@ -171,10 +170,10 @@ export function Dashboard() {
               <>
                 <button
                   onClick={() => setCurrentView("users")}
-                  className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
+                  className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                     currentView === "users"
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-primary-50 text-primary border-l-4 border-primary"
+                      : "text-secondary-700 hover:bg-secondary-50"
                   }`}
                 >
                   User Management
@@ -182,10 +181,10 @@ export function Dashboard() {
 
                 <button
                   onClick={() => setCurrentView("stats")}
-                  className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
+                  className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                     currentView === "stats"
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-primary-50 text-primary border-l-4 border-primary"
+                      : "text-secondary-700 hover:bg-secondary-50"
                   }`}
                 >
                   Reports & Stats
@@ -197,7 +196,7 @@ export function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 min-w-0 overflow-auto p-8">
         {renderContent()}
       </div>
     </div>

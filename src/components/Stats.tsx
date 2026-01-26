@@ -7,41 +7,41 @@ export function Stats() {
   if (!ticketStats) {
     return (
       <div className="flex justify-center items-center min-h-96">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Reports & Statistics</h2>
+    <div className="space-y-section">
+      <div className="card">
+        <h2 className="text-2xl font-semibold text-secondary-900 mb-6">Reports & Statistics</h2>
 
         {/* Overall Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          <div className="bg-blue-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-blue-600">Total Tickets</h3>
-            <p className="text-2xl font-bold text-blue-900">{ticketStats.total}</p>
+          <div className="card">
+            <h3 className="text-sm font-semibold text-primary mb-2">Total Tickets</h3>
+            <p className="text-2xl font-bold text-primary">{ticketStats.total}</p>
           </div>
-          <div className="bg-red-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-red-600">New</h3>
-            <p className="text-2xl font-bold text-red-900">{ticketStats.new}</p>
+          <div className="card bg-primary-50">
+            <h3 className="text-sm font-semibold text-primary mb-2">New</h3>
+            <p className="text-2xl font-bold text-primary">{ticketStats.new}</p>
           </div>
-          <div className="bg-purple-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-purple-600">Assigned</h3>
+          <div className="card bg-purple-50">
+            <h3 className="text-sm font-semibold text-purple-800 mb-2">Assigned</h3>
             <p className="text-2xl font-bold text-purple-900">{ticketStats.assigned}</p>
           </div>
-          <div className="bg-yellow-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-yellow-600">In Progress</h3>
-            <p className="text-2xl font-bold text-yellow-900">{ticketStats.inProgress}</p>
+          <div className="card bg-amber-50">
+            <h3 className="text-sm font-semibold text-amber-800 mb-2">In Progress</h3>
+            <p className="text-2xl font-bold text-amber-900">{ticketStats.inProgress}</p>
           </div>
-          <div className="bg-green-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-green-600">Resolved</h3>
-            <p className="text-2xl font-bold text-green-900">{ticketStats.resolved}</p>
+          <div className="card bg-emerald-50">
+            <h3 className="text-sm font-semibold text-emerald-800 mb-2">Resolved</h3>
+            <p className="text-2xl font-bold text-emerald-900">{ticketStats.resolved}</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-gray-600">Closed</h3>
-            <p className="text-2xl font-bold text-gray-900">{ticketStats.closed}</p>
+          <div className="card bg-secondary-50">
+            <h3 className="text-sm font-semibold text-secondary-700 mb-2">Closed</h3>
+            <p className="text-2xl font-bold text-secondary-900">{ticketStats.closed}</p>
           </div>
         </div>
 
@@ -56,7 +56,7 @@ export function Stats() {
                   <div className="flex items-center space-x-2">
                     <div className="w-32 bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-blue-600 h-2 rounded-full"
+                        className="bg-primary h-2 rounded-full"
                         style={{
                           width: `${ticketStats.total > 0 ? (count / ticketStats.total) * 100 : 0}%`
                         }}
@@ -106,34 +106,34 @@ export function Stats() {
 
         {/* Key Metrics */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h4 className="text-lg font-semibold text-gray-900 mb-2">Resolution Rate</h4>
-            <p className="text-3xl font-bold text-green-600">
+          <div className="card bg-secondary-50">
+            <h4 className="text-lg font-semibold text-secondary-900 mb-2">Resolution Rate</h4>
+            <p className="text-3xl font-bold text-emerald-800">
               {ticketStats.total > 0 
                 ? Math.round(((ticketStats.resolved + ticketStats.closed) / ticketStats.total) * 100)
                 : 0}%
             </p>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-secondary-600 mt-1">
               {ticketStats.resolved + ticketStats.closed} of {ticketStats.total} tickets resolved
             </p>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h4 className="text-lg font-semibold text-gray-900 mb-2">Open Tickets</h4>
-            <p className="text-3xl font-bold text-orange-600">
+          <div className="card bg-secondary-50">
+            <h4 className="text-lg font-semibold text-secondary-900 mb-2">Open Tickets</h4>
+            <p className="text-3xl font-bold text-orange-800">
               {ticketStats.new + ticketStats.assigned + ticketStats.inProgress}
             </p>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-secondary-600 mt-1">
               Tickets requiring attention
             </p>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h4 className="text-lg font-semibold text-gray-900 mb-2">Critical Issues</h4>
-            <p className="text-3xl font-bold text-red-600">
+          <div className="card bg-secondary-50">
+            <h4 className="text-lg font-semibold text-secondary-900 mb-2">Critical Issues</h4>
+            <p className="text-3xl font-bold text-red-800">
               {ticketStats.byPriority.critical}
             </p>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-secondary-600 mt-1">
               High priority tickets
             </p>
           </div>
