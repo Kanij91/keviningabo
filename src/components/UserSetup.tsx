@@ -18,18 +18,13 @@ export function UserSetup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Is createProfile callable?", typeof createProfile);
-    console.log("Submitting profile form...");
-    console.log("Name value:", name);
-    console.log("User email value:", loggedInUser?.email);
 
     if (!name.trim() || !loggedInUser?.email) {
-        console.log("Validation failed. Request skipped."); return;
+      return;
     }
 
     setIsSubmitting(true);
     try {
-      console.log("Attempting Convex mutation with:", { email: loggedInUser.email, name });
       await createProfile({
         email: loggedInUser.email,
         name,
