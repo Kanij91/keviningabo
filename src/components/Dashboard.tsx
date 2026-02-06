@@ -139,11 +139,11 @@ export function Dashboard() {
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-background relative">
       {/* Mobile Menu Toggle */}
-      <div className="md:hidden bg-background-secondary border-b border-border p-4 flex justify-between items-center sticky top-0 z-20">
+      <div className="md:hidden bg-background-secondary border-b border-border p-4 flex justify-between items-center sticky top-0 z-20 shadow-sm">
         <span className="font-semibold text-secondary-900">Menu</span>
         <button
           onClick={toggleMobileMenu}
-          className="p-2 text-secondary-700 hover:bg-secondary-100 rounded-md"
+          className="p-2 text-secondary-700 hover:bg-secondary-100 rounded-md transition-colors"
           aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? (
@@ -158,13 +158,25 @@ export function Dashboard() {
         </button>
       </div>
 
+      {/* Mobile Backdrop */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Sidebar */}
       <div
-        className={`${
-          isMobileMenuOpen ? "block" : "hidden"
-        } md:block absolute md:relative top-14 md:top-0 left-0 right-0 z-10 w-full md:w-64 bg-background-secondary border-b md:border-b-0 md:border-r border-border shadow-sm min-h-[calc(100vh-3.5rem)] md:min-h-screen`}
+        className={`
+          fixed inset-y-0 left-0 z-50 w-64 bg-background-secondary border-r border-border shadow-lg transform transition-transform duration-300 ease-in-out
+          ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+          md:relative md:translate-x-0 md:shadow-none md:z-0
+          md:min-h-screen
+        `}
       >
-        <nav className="mt-0 md:mt-6 p-4 md:p-0">
+        <nav className="mt-6 md:mt-6 p-4 md:p-0">
           <div className="md:px-4 space-y-1">
             <NavButton view="dashboard" label="Dashboard" />
             <NavButton view="tickets" label={isEndUser ? "My Tickets" : "All Tickets"} />
@@ -182,7 +194,7 @@ export function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className={`flex-1 min-w-0 overflow-auto p-4 md:p-8 ${isMobileMenuOpen ? 'hidden md:block' : 'block'}`}>
+      <div className="flex-1 min-w-0 overflow-auto p-4 md:p-8">
         {renderContent()}
       </div>
     </div>
