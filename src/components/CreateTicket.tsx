@@ -131,8 +131,14 @@ export function CreateTicket({ onSuccess }: CreateTicketProps) {
 
         <div className="flex justify-end space-x-4 pt-4 border-t border-border">
           <button
-            type="reset"
+            type="button"
             className="btn-secondary"
+            onClick={() => {
+              setTitle("");
+              setDescription("");
+              setPriority("medium");
+              setCategory("software");
+            }}
           >
             Clear
           </button>
