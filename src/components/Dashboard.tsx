@@ -127,16 +127,16 @@ export function Dashboard() {
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <div className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-background-secondary border-r border-border shadow-sm
+        fixed top-16 bottom-0 left-0 z-40 w-64 bg-background-secondary border-r border-border shadow-sm
         transform transition-transform duration-300 ease-in-out
-        md:relative md:translate-x-0
+        md:relative md:top-0 md:bottom-auto md:translate-x-0
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
       `}>
         <div className="flex justify-end p-4 md:hidden">

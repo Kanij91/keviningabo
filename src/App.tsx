@@ -9,7 +9,7 @@ import { UserSetup } from "./components/UserSetup";
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <header className="sticky top-0 z-10 bg-primary border-b border-primary-700 shadow-sm">
+      <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-primary border-b border-primary-700 shadow-sm">
         <div className="h-16 flex justify-between items-center px-6">
           <h2 className="text-white font-serif text-xl font-bold tracking-tight">ICT Help Desk System</h2>
           <Authenticated>
@@ -17,7 +17,7 @@ export default function App() {
           </Authenticated>
         </div>
       </header>
-      <main className="flex-1">
+      <main className="flex-1 pt-16">
         <Content />
       </main>
       <Toaster />
