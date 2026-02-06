@@ -69,8 +69,8 @@ export function UserManagement() {
         </div>
       </div>
 
-      {/* Users Table */}
-      <div className="overflow-x-auto">
+      {/* Users Table / Cards */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full divide-y divide-border">
           <thead className="bg-secondary-50">
             <tr>
@@ -123,6 +123,39 @@ export function UserManagement() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {filteredUsers.map((user) => (
+          <div key={user._id} className="bg-secondary-50 p-4 rounded-container border border-border">
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="font-semibold text-secondary-900">{user.name || "N/A"}</h3>
+              <span className={`badge-status ${getRoleColor(user.role || "")} text-xs`}>
+                {user.role?.replace("-", " ") || "N/A"}
+              </span>
+            </div>
+            <p className="text-sm text-secondary-600 mb-2">{user.email || "N/A"}</p>
+
+            <div className="flex items-center justify-between text-sm mb-3">
+              <span className="text-secondary-500">Department</span>
+              <span className="font-medium text-secondary-900">{user.department || "N/A"}</span>
+            </div>
+
+            <div className="pt-3 border-t border-border">
+              <label className="text-xs font-semibold text-secondary-700 block mb-1">Change Role</label>
+              <select
+                value={user.role || "end-user"}
+                onChange={(e) => handleRoleChange(user._id, e.target.value as "admin" | "technician" | "end-user")}
+                className="form-select text-sm w-full"
+              >
+                <option value="end-user">End User</option>
+                <option value="technician">Technician</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+        ))}
       </div>
 
       {filteredUsers.length === 0 && (

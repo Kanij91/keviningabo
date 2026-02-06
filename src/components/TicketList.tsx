@@ -132,8 +132,8 @@ export function TicketList() {
           </div>
         </div>
 
-        {/* Tickets Table */}
-        <div className="overflow-x-auto">
+        {/* Tickets Table / Cards */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full divide-y divide-border">
             <thead className="bg-secondary-50">
               <tr>
@@ -211,6 +211,51 @@ export function TicketList() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden space-y-4">
+          {filteredTickets.map((ticket) => (
+            <div key={ticket._id} className="bg-secondary-50 p-4 rounded-container border border-border">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h3 className="font-semibold text-secondary-900">{ticket.title}</h3>
+                  <p className="text-xs text-secondary-500">{new Date(ticket._creationTime).toLocaleDateString()}</p>
+                </div>
+                <span className={`badge-status ${getStatusColor(ticket.status)} text-xs`}>
+                  {ticket.status.replace("-", " ")}
+                </span>
+              </div>
+              <p className="text-sm text-secondary-600 mb-3 line-clamp-2">{ticket.description}</p>
+
+              <div className="grid grid-cols-2 gap-2 text-sm mb-3">
+                <div>
+                  <span className="text-secondary-500 text-xs block">Priority</span>
+                  <span className={`font-medium capitalize ${getPriorityColor(ticket.priority).split(" ")[0]}`}>
+                    {ticket.priority}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-secondary-500 text-xs block">Category</span>
+                  <span className="font-medium capitalize text-secondary-900">{ticket.category}</span>
+                </div>
+              </div>
+
+              {!isEndUser && (
+                <div className="mb-3">
+                   <span className="text-secondary-500 text-xs block">Requester</span>
+                   <span className="text-sm text-secondary-900">{ticket.requesterName}</span>
+                </div>
+              )}
+
+              <button
+                onClick={() => setSelectedTicket(ticket)}
+                className="w-full btn-secondary text-sm py-2"
+              >
+                View Details
+              </button>
+            </div>
+          ))}
         </div>
 
         {filteredTickets.length === 0 && (

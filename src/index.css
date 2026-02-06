@@ -92,25 +92,26 @@ body {
 }
 
 /* Form inputs - Institutional styling */
+/* Mobile optimization: text-base prevents iOS zoom */
 .form-input {
   @apply w-full px-4 py-2.5 rounded-container bg-background-secondary border border-border
     focus:border-primary focus:ring-2 focus:ring-primary/20
     outline-none transition-all
-    text-secondary-900 placeholder-secondary-400 text-sm;
+    text-secondary-900 placeholder-secondary-400 text-base md:text-sm;
 }
 
 .form-select {
   @apply w-full px-4 py-2.5 rounded-container bg-background-secondary border border-border
     focus:border-primary focus:ring-2 focus:ring-primary/20
     outline-none transition-all
-    text-secondary-900 text-sm;
+    text-secondary-900 text-base md:text-sm;
 }
 
 .form-textarea {
   @apply w-full px-4 py-2.5 rounded-container bg-background-secondary border border-border
     focus:border-primary focus:ring-2 focus:ring-primary/20
     outline-none transition-all
-    text-secondary-900 placeholder-secondary-400 text-sm
+    text-secondary-900 placeholder-secondary-400 text-base md:text-sm
     resize-y;
 }
 

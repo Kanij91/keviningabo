@@ -11,6 +11,7 @@ type View = "dashboard" | "tickets" | "create-ticket" | "knowledge-base" | "user
 
 export function Dashboard() {
   const [currentView, setCurrentView] = useState<View>("dashboard");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const currentUser = useQuery(api.users.getCurrentUser);
   const myTickets = currentUser ? useQuery(api.tickets.getMyTickets) : null;
   const ticketStats =
@@ -116,79 +117,64 @@ export function Dashboard() {
     }
   };
 
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const handleViewChange = (view: View) => {
+    setCurrentView(view);
+    setIsMobileMenuOpen(false);
+  };
+
+  const NavButton = ({ view, label }: { view: View; label: string }) => (
+    <button
+      onClick={() => handleViewChange(view)}
+      className={`w-full text-left px-4 py-3 md:py-2.5 rounded-container transition-colors font-medium text-base md:text-sm ${
+        currentView === view
+          ? "bg-primary-50 text-primary border-l-4 border-primary"
+          : "text-secondary-700 hover:bg-secondary-50"
+      }`}
+    >
+      {label}
+    </button>
+  );
+
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex flex-col md:flex-row min-h-screen bg-background relative">
+      {/* Mobile Menu Toggle */}
+      <div className="md:hidden bg-background-secondary border-b border-border p-4 flex justify-between items-center sticky top-0 z-20">
+        <span className="font-semibold text-secondary-900">Menu</span>
+        <button
+          onClick={toggleMobileMenu}
+          className="p-2 text-secondary-700 hover:bg-secondary-100 rounded-md"
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+      </div>
+
       {/* Sidebar */}
-      <div className="w-64 bg-background-secondary border-r border-border shadow-sm">
-        <nav className="mt-6">
-          <div className="px-4 space-y-1">
-            <button
-              onClick={() => setCurrentView("dashboard")}
-              className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
-                currentView === "dashboard"
-                  ? "bg-primary-50 text-primary border-l-4 border-primary"
-                  : "text-secondary-700 hover:bg-secondary-50"
-              }`}
-            >
-              Dashboard
-            </button>
-            
-            <button
-              onClick={() => setCurrentView("tickets")}
-              className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
-                currentView === "tickets"
-                  ? "bg-primary-50 text-primary border-l-4 border-primary"
-                  : "text-secondary-700 hover:bg-secondary-50"
-              }`}
-            >
-              {isEndUser ? "My Tickets" : "All Tickets"}
-            </button>
-
-            <button
-              onClick={() => setCurrentView("create-ticket")}
-              className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
-                currentView === "create-ticket"
-                  ? "bg-primary-50 text-primary border-l-4 border-primary"
-                  : "text-secondary-700 hover:bg-secondary-50"
-              }`}
-            >
-              Create Ticket
-            </button>
-
-            <button
-              onClick={() => setCurrentView("knowledge-base")}
-              className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
-                currentView === "knowledge-base"
-                  ? "bg-primary-50 text-primary border-l-4 border-primary"
-                  : "text-secondary-700 hover:bg-secondary-50"
-              }`}
-            >
-              Knowledge Base
-            </button>
+      <div
+        className={`${
+          isMobileMenuOpen ? "block" : "hidden"
+        } md:block absolute md:relative top-14 md:top-0 left-0 right-0 z-10 w-full md:w-64 bg-background-secondary border-b md:border-b-0 md:border-r border-border shadow-sm min-h-[calc(100vh-3.5rem)] md:min-h-screen`}
+      >
+        <nav className="mt-0 md:mt-6 p-4 md:p-0">
+          <div className="md:px-4 space-y-1">
+            <NavButton view="dashboard" label="Dashboard" />
+            <NavButton view="tickets" label={isEndUser ? "My Tickets" : "All Tickets"} />
+            <NavButton view="create-ticket" label="Create Ticket" />
+            <NavButton view="knowledge-base" label="Knowledge Base" />
 
             {isAdmin && (
               <>
-                <button
-                  onClick={() => setCurrentView("users")}
-                  className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
-                    currentView === "users"
-                      ? "bg-primary-50 text-primary border-l-4 border-primary"
-                      : "text-secondary-700 hover:bg-secondary-50"
-                  }`}
-                >
-                  User Management
-                </button>
-
-                <button
-                  onClick={() => setCurrentView("stats")}
-                  className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
-                    currentView === "stats"
-                      ? "bg-primary-50 text-primary border-l-4 border-primary"
-                      : "text-secondary-700 hover:bg-secondary-50"
-                  }`}
-                >
-                  Reports & Stats
-                </button>
+                <NavButton view="users" label="User Management" />
+                <NavButton view="stats" label="Reports & Stats" />
               </>
             )}
           </div>
@@ -196,7 +182,7 @@ export function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 min-w-0 overflow-auto p-8">
+      <div className={`flex-1 min-w-0 overflow-auto p-4 md:p-8 ${isMobileMenuOpen ? 'hidden md:block' : 'block'}`}>
         {renderContent()}
       </div>
     </div>
