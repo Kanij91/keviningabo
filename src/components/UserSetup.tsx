@@ -6,7 +6,6 @@ import { toast } from "sonner";
 export function UserSetup() {
   const [name, setName] = useState("");
   const [department, setDepartment] = useState("");
-  const [role, setRole] = useState<"admin" | "technician" | "end-user">("end-user");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const loggedInUser = useQuery(api.auth.loggedInUser);
@@ -29,7 +28,7 @@ export function UserSetup() {
         email: loggedInUser.email,
         name,
         department,
-        role,
+        role: "end-user",
       });
 
       toast.success("Profile created successfully!");
@@ -74,23 +73,6 @@ export function UserSetup() {
                 disabled
                 className="form-input bg-secondary-50"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-secondary-700 mb-2">
-                Role *
-              </label>
-              <select
-                value={role}
-                onChange={(e) =>
-                  setRole(e.target.value as "admin" | "technician" | "end-user")
-                }
-                className="form-select"
-              >
-                <option value="end-user">End User</option>
-                <option value="technician">Technician</option>
-                <option value="admin">Admin</option>
-              </select>
             </div>
 
             <div>
