@@ -11,6 +11,7 @@ type View = "dashboard" | "tickets" | "create-ticket" | "knowledge-base" | "user
 
 export function Dashboard() {
   const [currentView, setCurrentView] = useState<View>("dashboard");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const currentUser = useQuery(api.users.getCurrentUser);
   const myTickets = currentUser ? useQuery(api.tickets.getMyTickets) : null;
   const ticketStats =
@@ -29,6 +30,11 @@ export function Dashboard() {
   const isAdmin = currentUser.role === "admin";
   const isTechnician = currentUser.role === "technician" || isAdmin;
   const isEndUser = currentUser.role === "end-user";
+
+  const handleNavClick = (view: View) => {
+    setCurrentView(view);
+    setIsSidebarOpen(false);
+  };
 
   const renderContent = () => {
     switch (currentView) {
@@ -117,13 +123,37 @@ export function Dashboard() {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background relative">
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="w-64 bg-background-secondary border-r border-border shadow-sm">
-        <nav className="mt-6">
+      <div className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-background-secondary border-r border-border shadow-sm
+        transform transition-transform duration-300 ease-in-out
+        md:relative md:translate-x-0
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+      `}>
+        <div className="flex justify-end p-4 md:hidden">
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="text-secondary-500 hover:text-secondary-700"
+            aria-label="Close sidebar"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <nav className="mt-2 md:mt-6">
           <div className="px-4 space-y-1">
             <button
-              onClick={() => setCurrentView("dashboard")}
+              onClick={() => handleNavClick("dashboard")}
               className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                 currentView === "dashboard"
                   ? "bg-primary-50 text-primary border-l-4 border-primary"
@@ -134,7 +164,7 @@ export function Dashboard() {
             </button>
             
             <button
-              onClick={() => setCurrentView("tickets")}
+              onClick={() => handleNavClick("tickets")}
               className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                 currentView === "tickets"
                   ? "bg-primary-50 text-primary border-l-4 border-primary"
@@ -145,7 +175,7 @@ export function Dashboard() {
             </button>
 
             <button
-              onClick={() => setCurrentView("create-ticket")}
+              onClick={() => handleNavClick("create-ticket")}
               className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                 currentView === "create-ticket"
                   ? "bg-primary-50 text-primary border-l-4 border-primary"
@@ -156,7 +186,7 @@ export function Dashboard() {
             </button>
 
             <button
-              onClick={() => setCurrentView("knowledge-base")}
+              onClick={() => handleNavClick("knowledge-base")}
               className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                 currentView === "knowledge-base"
                   ? "bg-primary-50 text-primary border-l-4 border-primary"
@@ -169,7 +199,7 @@ export function Dashboard() {
             {isAdmin && (
               <>
                 <button
-                  onClick={() => setCurrentView("users")}
+                  onClick={() => handleNavClick("users")}
                   className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                     currentView === "users"
                       ? "bg-primary-50 text-primary border-l-4 border-primary"
@@ -180,7 +210,7 @@ export function Dashboard() {
                 </button>
 
                 <button
-                  onClick={() => setCurrentView("stats")}
+                  onClick={() => handleNavClick("stats")}
                   className={`w-full text-left px-4 py-2.5 rounded-container transition-colors font-medium text-sm ${
                     currentView === "stats"
                       ? "bg-primary-50 text-primary border-l-4 border-primary"
@@ -196,7 +226,16 @@ export function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 min-w-0 overflow-auto p-8">
+      <div className="flex-1 min-w-0 overflow-auto p-4 md:p-8">
+        <button
+          className="md:hidden mb-4 text-primary hover:text-primary-hover"
+          onClick={() => setIsSidebarOpen(true)}
+          aria-label="Open sidebar"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
         {renderContent()}
       </div>
     </div>
