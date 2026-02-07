@@ -28,7 +28,6 @@ export function UserSetup() {
         email: loggedInUser.email,
         name,
         department,
-        role: "end-user",
       });
 
       toast.success("Profile created successfully!");

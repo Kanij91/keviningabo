@@ -15,18 +15,10 @@ export const getCurrentUser = query({
 
 export const createUserProfile = mutation({
   args: {
-  email: v.string(),
-  name: v.optional(v.string()),
-  role: v.optional(
-    v.union(
-      v.literal("admin"),
-      v.literal("technician"),
-      v.literal("end-user")
-    )
-  ),
-  department: v.optional(v.string()),
-},
-
+    email: v.string(),
+    name: v.optional(v.string()),
+    department: v.optional(v.string()),
+  },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
@@ -42,7 +34,7 @@ export const createUserProfile = mutation({
     await ctx.db.patch(userId, {
       email: args.email,
       name: args.name ?? user.name ?? "New User",
-      role: args.role ?? "end-user",
+      role: "end-user",
       department: args.department ?? "",
     });
 

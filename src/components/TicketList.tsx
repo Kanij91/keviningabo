@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
 import { Id } from "../../convex/_generated/dataModel";
+import { Ticket } from "../lib/types";
 
 export function TicketList() {
-  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
@@ -33,14 +34,16 @@ export function TicketList() {
   
   const tickets = isEndUser ? myTickets : allTickets;
 
-  const filteredTickets = tickets?.filter((ticket) => {
-    const matchesSearch = ticket.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         ticket.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "all" || ticket.status === statusFilter;
-    const matchesPriority = priorityFilter === "all" || ticket.priority === priorityFilter;
-    
-    return matchesSearch && matchesStatus && matchesPriority;
-  }) || [];
+  const filteredTickets = useMemo(() => {
+    return tickets?.filter((ticket) => {
+      const matchesSearch = ticket.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           ticket.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === "all" || ticket.status === statusFilter;
+      const matchesPriority = priorityFilter === "all" || ticket.priority === priorityFilter;
+
+      return matchesSearch && matchesStatus && matchesPriority;
+    }) || [];
+  }, [tickets, searchTerm, statusFilter, priorityFilter]);
 
   const handleUpdateTicket = async (ticketId: Id<"tickets">, updates: any) => {
     try {
@@ -193,7 +196,7 @@ export function TicketList() {
                   </td>
                   {!isEndUser && (
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary-900 font-medium">
-                      {(ticket as any).assignedTechnicianName || "Unassigned"}
+                      {ticket.assignedTechnicianName || "Unassigned"}
                     </td>
                   )}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary-600">
