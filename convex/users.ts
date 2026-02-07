@@ -100,3 +100,62 @@ export const updateUserRole = mutation({
     return args.userId;
   },
 });
+
+export const anonymizeUser = mutation({
+  args: {
+    userId: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    const currentUserId = await getAuthUserId(ctx);
+    if (!currentUserId) {
+      throw new Error("Not authenticated");
+    }
+
+    const currentUser = await ctx.db.get(currentUserId);
+    if (!currentUser || currentUser.role !== "admin") {
+      throw new Error("Unauthorized - Admin access required");
+    }
+
+    const targetUser = await ctx.db.get(args.userId);
+    if (!targetUser) {
+      throw new Error("User not found");
+    }
+
+    // 1. Anonymize tickets where this user is the requester
+    if (targetUser.email) {
+      const ticketsByRequester = await ctx.db
+        .query("tickets")
+        .withIndex("by_requester_email", (q) =>
+          q.eq("requesterEmail", targetUser.email as string)
+        )
+        .collect();
+
+      for (const ticket of ticketsByRequester) {
+        await ctx.db.patch(ticket._id, {
+          requesterName: "Former Employee",
+          requesterEmail: `former_employee_${args.userId}@deleted.com`,
+        });
+      }
+    }
+
+    // 2. Unassign tickets where this user is the assigned technician
+    const ticketsByTechnician = await ctx.db
+      .query("tickets")
+      .withIndex("by_assigned_technician", (q) =>
+        q.eq("assignedTechnician", args.userId)
+      )
+      .collect();
+
+    for (const ticket of ticketsByTechnician) {
+      await ctx.db.patch(ticket._id, {
+        assignedTechnician: undefined,
+        status: ticket.status === "assigned" ? "new" : ticket.status, // Optionally reset status if just assigned
+      });
+    }
+
+    // 3. Delete the user
+    await ctx.db.delete(args.userId);
+
+    return { success: true };
+  },
+});

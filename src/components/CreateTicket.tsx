@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
+import DOMPurify from "dompurify";
 
 interface CreateTicketProps {
   onSuccess?: () => void;
@@ -28,9 +29,13 @@ export function CreateTicket({ onSuccess }: CreateTicketProps) {
 
     setIsSubmitting(true);
     try {
+      // Sanitize input to prevent XSS (OWASP A03)
+      const sanitizedTitle = DOMPurify.sanitize(title.trim());
+      const sanitizedDescription = DOMPurify.sanitize(description.trim());
+
       await createTicket({
-        title: title.trim(),
-        description: description.trim(),
+        title: sanitizedTitle,
+        description: sanitizedDescription,
         priority,
         category,
       });
