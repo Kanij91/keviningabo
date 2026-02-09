@@ -4,6 +4,7 @@ import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
 import { Id } from "../../convex/_generated/dataModel";
 import { Ticket } from "../lib/types";
+import { TicketDetailModal } from "./TicketDetailModal";
 
 export function TicketList() {
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
@@ -53,6 +54,7 @@ export function TicketList() {
     } catch (error) {
       toast.error("Failed to update ticket");
       console.error(error);
+      throw error;
     }
   };
 
@@ -223,140 +225,14 @@ export function TicketList() {
         )}
       </div>
 
-      {/* Ticket Detail Modal */}
       {selectedTicket && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="card max-w-2xl w-full max-h-screen overflow-y-auto shadow-lg">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-6">
-                <h3 className="text-xl font-semibold text-secondary-900">Ticket Details</h3>
-                <button
-                  onClick={() => setSelectedTicket(null)}
-                  className="text-secondary-400 hover:text-secondary-600 transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-sm font-semibold text-secondary-700 mb-1">Title</label>
-                  <p className="text-secondary-900">{selectedTicket.title}</p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-secondary-700 mb-1">Description</label>
-                  <p className="text-secondary-900 whitespace-pre-wrap bg-secondary-50 p-3 rounded-container">{selectedTicket.description}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-2">Status</label>
-                    {!isEndUser ? (
-                      <select
-                        value={selectedTicket.status}
-                        onChange={(e) => handleUpdateTicket(selectedTicket._id, { status: e.target.value })}
-                        className="form-select"
-                      >
-                        <option value="new">New</option>
-                        <option value="assigned">Assigned</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="on-hold">On Hold</option>
-                        <option value="resolved">Resolved</option>
-                        <option value="closed">Closed</option>
-                      </select>
-                    ) : (
-                      <p className="text-secondary-900 capitalize font-medium">{selectedTicket.status.replace("-", " ")}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-2">Priority</label>
-                    {!isEndUser ? (
-                      <select
-                        value={selectedTicket.priority}
-                        onChange={(e) => handleUpdateTicket(selectedTicket._id, { priority: e.target.value })}
-                        className="form-select"
-                      >
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                        <option value="critical">Critical</option>
-                      </select>
-                    ) : (
-                      <p className="text-secondary-900 capitalize font-medium">{selectedTicket.priority}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-1">Category</label>
-                    <p className="text-secondary-900 capitalize font-medium">{selectedTicket.category}</p>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-1">Requester</label>
-                    <p className="text-secondary-900 font-medium">{selectedTicket.requesterName}</p>
-                    <p className="text-sm text-secondary-600">{selectedTicket.requesterEmail}</p>
-                  </div>
-                </div>
-
-                {!isEndUser && (
-                  <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-2">Assign Technician</label>
-                    <select
-                      value={selectedTicket.assignedTechnician || ""}
-                      onChange={(e) => handleUpdateTicket(selectedTicket._id, { 
-                        assignedTechnician: e.target.value || undefined,
-                        status: e.target.value ? "assigned" : selectedTicket.status
-                      })}
-                      className="form-select"
-                    >
-                      <option value="">Unassigned</option>
-                      {technicians?.map((tech) => (
-                        <option key={tech._id} value={tech._id}>
-                          {tech.name} ({tech.role})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {!isEndUser && (
-                  <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-2">Resolution Notes</label>
-                    <textarea
-                      value={selectedTicket.resolutionNotes || ""}
-                      onChange={(e) => handleUpdateTicket(selectedTicket._id, { resolutionNotes: e.target.value })}
-                      rows={4}
-                      className="form-textarea"
-                      placeholder="Add resolution notes..."
-                    />
-                  </div>
-                )}
-
-                {isEndUser && selectedTicket.resolutionNotes && (
-                  <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-1">Resolution Notes</label>
-                    <p className="text-secondary-900 whitespace-pre-wrap bg-secondary-50 p-3 rounded-container">{selectedTicket.resolutionNotes}</p>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-2 gap-4 text-sm text-secondary-600 pt-4 border-t border-border">
-                  <div>
-                    <label className="block font-semibold text-secondary-700 mb-1">Created</label>
-                    <p>{new Date(selectedTicket._creationTime).toLocaleString()}</p>
-                  </div>
-                  <div>
-                    <label className="block font-semibold text-secondary-700 mb-1">Last Updated</label>
-                    <p>{new Date(selectedTicket.lastUpdated).toLocaleString()}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TicketDetailModal
+          ticket={selectedTicket}
+          technicians={technicians}
+          isEndUser={isEndUser || false}
+          onClose={() => setSelectedTicket(null)}
+          onUpdate={handleUpdateTicket}
+        />
       )}
     </>
   );
