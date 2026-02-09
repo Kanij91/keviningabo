@@ -17,17 +17,17 @@ export function TicketList() {
 
   const myTickets = useQuery(
     api.tickets.getMyTickets,
-    currentUser ? {} : "skip"
+    currentUser && isEndUser ? {} : "skip"
   );
 
   const allTickets = useQuery(
     api.tickets.getAllTickets,
-    !isEndUser ? {} : "skip"
+    currentUser && !isEndUser ? {} : "skip"
   );
 
   const technicians = useQuery(
     api.users.getAllTechnicians,
-    !isEndUser ? {} : "skip"
+    currentUser && !isEndUser ? {} : "skip"
   );
 
   const updateTicket = useMutation(api.tickets.updateTicket);
@@ -46,14 +46,12 @@ export function TicketList() {
     }) || [];
   }, [tickets, searchTerm, statusFilter, priorityFilter]);
 
-  const handleUpdateTicket = async (ticketId: Id<"tickets">, updates: any) => {
+  const handleUpdateTicket = async (ticketId: Id<"tickets">, updates: Partial<Ticket>) => {
     try {
       await updateTicket({ ticketId, ...updates });
       toast.success("Ticket updated successfully");
-      setSelectedTicket(null);
     } catch (error) {
       toast.error("Failed to update ticket");
-      console.error(error);
       throw error;
     }
   };
@@ -82,6 +80,10 @@ export function TicketList() {
 
   if (!currentUser) {
     return <div>Loading...</div>;
+  }
+
+  if (tickets === undefined) {
+    return <div>Loading tickets...</div>;
   }
 
   return (
