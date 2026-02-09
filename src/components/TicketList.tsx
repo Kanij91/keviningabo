@@ -200,7 +200,7 @@ export function TicketList() {
                   </td>
                   {!isEndUser && (
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary-900 font-medium">
-                      {ticket.assignedTechnicianName || technicians?.find(t => t._id === ticket.assignedTechnician)?.name || "Unassigned"}
+                      {technicians?.find(t => t._id === ticket.assignedTechnician)?.name || "Unassigned"}
                     </td>
                   )}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary-600">

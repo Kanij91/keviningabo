@@ -1,7 +1,7 @@
 @tailwind base;
 
 @layer base {
-  /* Academic/Institutional Typography */
+  /* Typography */
   h1 {
     @apply text-3xl md:text-4xl font-bold tracking-tight text-secondary-900;
     font-family: Georgia, "Times New Roman", serif;
@@ -49,7 +49,7 @@ body {
   line-height: 1.6;
 }
 
-/* Auth input fields - Institutional styling */
+/* Auth input fields */
 .auth-input-field {
   @apply w-full px-4 py-3 rounded-container bg-background-secondary border border-border
     focus:border-primary focus:ring-2 focus:ring-primary/20
@@ -57,7 +57,7 @@ body {
     text-secondary-900 placeholder-secondary-400;
 }
 
-/* Auth buttons - Institutional styling */
+/* Auth buttons */
 .auth-button {
   @apply w-full px-4 py-3 rounded-container bg-primary text-white font-semibold
     hover:bg-primary-hover transition-colors
@@ -66,7 +66,7 @@ body {
     tracking-wide;
 }
 
-/* Institutional button styles */
+/* button styles */
 .btn-primary {
   @apply px-5 py-2.5 rounded-container bg-accent text-white font-semibold
     hover:bg-accent-hover transition-colors
@@ -91,7 +91,7 @@ body {
     tracking-wide text-sm;
 }
 
-/* Form inputs - Institutional styling */
+/* Form inputs */
 .form-input {
   @apply w-full px-4 py-2.5 rounded-container bg-background-secondary border border-border
     focus:border-primary focus:ring-2 focus:ring-primary/20
@@ -114,19 +114,19 @@ body {
     resize-y;
 }
 
-/* Status badges - Professional styling */
+/* Status badges */
 .badge-status {
   @apply inline-flex px-3 py-1 text-xs font-semibold rounded-full
     border transition-colors;
 }
 
-/* Card styling - Institutional */
+/* Card styling */
 .card {
   @apply bg-background-secondary rounded-container shadow-card p-6
     border border-border;
 }
 
-/* Table styling - Institutional */
+/* Table styling */
 .table-header {
   @apply bg-secondary-50 text-secondary-700 font-semibold text-xs uppercase tracking-wider;
 }

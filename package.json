@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@convex-dev/auth": "^0.0.80",
-    "@types/dompurify": "^3.0.5",
     "clsx": "^2.1.1",
     "convex": "^1.24.2",
     "dompurify": "^3.3.1",
@@ -23,6 +22,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/dompurify": "^3.0.5",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
