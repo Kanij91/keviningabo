@@ -1,176 +1,84 @@
-ICT HelpDesk & Incident Management System
+# ICT HelpDesk & Incident Management System
 
-A scalable ICT HelpDesk and Incident Management System designed to streamline issue reporting, prioritization, tracking, and resolution within an organization. The system focuses on reliability, performance, and maintainability, with a modern Node.js-based backend.
+A robust and scalable ICT HelpDesk and Incident Management System designed to streamline organizational support workflows. This application enables efficient issue reporting, prioritization, tracking, and resolution, leveraging a modern, real-time backend architecture.
 
-Project Overview
+## 🚀 Key Features
 
-This application enables users to:
+*   **Ticket Management**: Comprehensive lifecycle management from creation to closure.
+*   **Role-Based Access Control (RBAC)**: Distinct roles for Administrators, Technicians, and End-Users to ensure secure data access and workflow integrity.
+*   **Knowledge Base**: Centralized repository for troubleshooting guides and documentation to empower self-service.
+*   **Real-time Updates**: Instant reflection of ticket status changes, assignments, and comments using Convex's reactive backend.
+*   **Responsive Design**: Mobile-friendly interface built with Tailwind CSS, ensuring accessibility across devices.
+*   **Secure Authentication**: Robust user management via Convex Auth.
 
-Create and track support tickets
+## 🛠️ Tech Stack
 
-Manage incidents and priorities
+**Frontend**
+*   **React 19**: Leveraging the latest React features for building interactive UIs.
+*   **Vite**: Next-generation frontend tooling for fast development and optimized builds.
+*   **Tailwind CSS**: Utility-first CSS framework for rapid UI development.
+*   **TypeScript**: Ensuring type safety and code reliability.
 
-Assign and resolve issues efficiently
+**Backend**
+*   **Convex**: The open-source reactive backend platform (Serverless functions & database).
+*   **Convex Auth**: Secure authentication with the Password provider.
+*   **Node.js Environment**: Backend logic written in TypeScript.
 
+## 🏁 Getting Started
 
+Follow these instructions to set up the project locally.
 
-Improve visibility into support workflows
+### Prerequisites
 
-The project was built with scalability and future extension in mind, following clean architecture and asynchronous, non-blocking backend patterns.
+*   **Node.js** (v18 or higher recommended)
+*   **npm** (Node Package Manager)
 
-My Role
+### Installation
 
-Role: Tech Lead / Backend Engineer
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/ict-helpdesk.git
+    cd ict-helpdesk
+    ```
 
-Led the project end-to-end from requirements to deployment
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-Designed the backend architecture and API contracts
+3.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+    This command will start both the frontend (Vite) and the backend (Convex). On the first run, it will prompt you to log in to Convex and configure a new project automatically.
 
-Implemented core business logic and HTTP APIs
+4.  **Open the application:**
+    Visit `http://localhost:5173` in your browser.
 
-Reviewed code and guided development standards
+## 📂 Project Structure
 
-Optimized queries and request handling for performance and reliability
+*   `src/`: Frontend application code (React components, hooks, styles).
+    *   `src/components/`: Reusable UI components.
+    *   `src/lib/`: Shared utilities and type definitions.
+*   `convex/`: Backend application code.
+    *   `convex/schema.ts`: Database schema definition.
+    *   `convex/auth.ts`: Authentication configuration.
+    *   `convex/tickets.ts`: Ticket management logic.
+    *   `convex/users.ts`: User management logic.
 
-Tech Stack
+## 👨‍💻 My Role: Tech Lead / Backend Engineer
 
-Backend: Node.js (Convex)
+As the Tech Lead and Backend Engineer, I was responsible for the end-to-end delivery of the project, focusing on architecture, scalability, and maintainability.
 
-Language: TypeScript
+*   **Architected the full-stack solution**, ensuring a seamless integration between the React frontend and Convex backend.
+*   **Designed the database schema** and API contracts for optimal performance and data integrity.
+*   **Implemented core business logic**, including complex ticket routing, RBAC, and real-time updates.
+*   **Established coding standards** and led the development process, ensuring high code quality through rigorous reviews.
+*   **Optimized performance** by leveraging Convex's indexing and query capabilities.
 
-Frontend: React + Vite
+## 🔮 Future Improvements
 
-Authentication: Convex Auth
-
-API: HTTP/REST endpoints
-
-Tooling: Chef, npm
-
-Architecture & Design
-
-Modular backend structure for maintainability
-
-Asynchronous, non-blocking request handling
-
-Clear separation between authentication and business logic
-
-Optimized data access with pagination and indexing
-
-Role-based access control at the API level
-
-Project Structure
-
-app/ – Frontend (React + Vite)
-
-convex/ – Backend logic, data models, and HTTP APIs
-
-convex/router.ts – User-defined HTTP routes
-
-convex/http.ts – Authentication and core routing
-
-Running the Project Locally
-npm install
-npm run dev
-
-
-This starts both the frontend and backend development servers.
-
-Authentication
-
-The app currently uses Convex Auth (Anonymous authentication) for development convenience. This can be replaced with stricter authentication methods before production deployment.
-
-Deployment
-
-The project is connected to a Convex deployment and can be deployed to production following Convex best practices.
-See the official Convex documentation for deployment and scaling guidance.
-
-Future Improvements
-
-Advanced role-based permissions
-
-Real-time notifications and updates
-
-Enhanced reporting and analytics
-
-Integration with external monitoring tools
-
-
-Improve visibility into support workflows
-
-The project was built with scalability and future extension in mind, following clean architecture and asynchronous, non-blocking backend patterns.
-
-My Role
-
-Role: Tech Lead / Backend Engineer
-
-Led the project end-to-end from requirements to deployment
-
-Designed the backend architecture and API contracts
-
-Implemented core business logic and HTTP APIs
-
-Reviewed code and guided development standards
-
-Optimized queries and request handling for performance and reliability
-
-Tech Stack
-
-Backend: Node.js (Convex)
-
-Language: TypeScript
-
-Frontend: React + Vite
-
-Authentication: Convex Auth
-
-API: HTTP/REST endpoints
-
-Tooling: Chef, npm
-
-Architecture & Design
-
-Modular backend structure for maintainability
-
-Asynchronous, non-blocking request handling
-
-Clear separation between authentication and business logic
-
-Optimized data access with pagination and indexing
-
-Role-based access control at the API level
-
-Project Structure
-
-app/ – Frontend (React + Vite)
-
-convex/ – Backend logic, data models, and HTTP APIs
-
-convex/router.ts – User-defined HTTP routes
-
-convex/http.ts – Authentication and core routing
-
-Running the Project Locally
-npm install
-npm run dev
-
-
-This starts both the frontend and backend development servers.
-
-Authentication
-
-The app currently uses Convex Auth (Anonymous authentication) for development convenience. This can be replaced with stricter authentication methods before production deployment.
-
-Deployment
-
-The project is connected to a Convex deployment and can be deployed to production following Convex best practices.
-See the official Convex documentation for deployment and scaling guidance.
-
-Future Improvements
-
-Advanced role-based permissions
-
-Real-time notifications and updates
-
-Enhanced reporting and analytics
-
-Integration with external monitoring tools
+*   **Advanced Analytics Dashboard**: Visualizing support metrics and KPIs.
+*   **SLA Tracking**: Automated monitoring and alerts for Service Level Agreements.
+*   **Integration with External Tools**: Connecting with monitoring platforms like Datadog or Sentry.
+*   **Enhanced Reporting**: Customizable reports for management.
